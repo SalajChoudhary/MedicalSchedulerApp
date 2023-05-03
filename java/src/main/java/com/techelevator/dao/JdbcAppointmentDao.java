@@ -1,19 +1,14 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Appointment;
-import com.techelevator.model.Doctor;
-import com.techelevator.model.Patient;
 import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -86,6 +81,36 @@ public class JdbcAppointmentDao implements AppointmentDao{
         String sql = "SELECT * FROM appointment JOIN doctor ON appointment.doctor_id=doctor.doctor_id WHERE doctor.doctor_id = ? AND appointment.appointment_date = ?;";
         try {
             SqlRowSet result = jdbcTemplate.queryForRowSet(sql, doctorId, appointmentDate);
+            while(result.next()) {
+                appointments.add(mapRowToAppointment(result));
+            }
+        } catch (NullValueInNestedPathException | EmptyResultDataAccessException e) {
+            throw new RuntimeException("No appointment found");
+        }
+        return appointments;
+    }
+
+    @Override
+    public List<Appointment> getPatientAppointmentsByUserId(int userId) {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointment JOIN patient ON appointment.patient_id=patient.patient_id WHERE patient.user_id = ?;";
+        try {
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql, userId);
+            while(result.next()) {
+                appointments.add(mapRowToAppointment(result));
+            }
+        } catch (NullValueInNestedPathException | EmptyResultDataAccessException e) {
+            throw new RuntimeException("No appointment found");
+        }
+        return appointments;
+    }
+
+    @Override
+    public List<Appointment> getDoctorAppointmentsByUserId(int userId) {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointment JOIN doctor ON appointment.doctor_id=doctor.doctor_id WHERE doctor.user_id = ?;";
+        try {
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql, userId);
             while(result.next()) {
                 appointments.add(mapRowToAppointment(result));
             }

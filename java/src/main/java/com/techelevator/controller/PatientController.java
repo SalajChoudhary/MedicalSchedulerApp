@@ -31,6 +31,10 @@ public class PatientController {
         return patientDao.getPatientById(id);
     }
 
+    @GetMapping("/getPatientId/{userId}")
+    public Map<String, Integer> getPatientIdByUserId(@PathVariable int userId) {
+        return Map.of("patientId", (int) patientDao.getPatientIdByUserId(userId));
+    }
     @GetMapping("/maxId")
     public Map<String, Integer> getMaxId() {
         return Map.of("userId", (Integer) patientDao.getMaxId());

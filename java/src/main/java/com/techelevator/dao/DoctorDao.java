@@ -20,5 +20,7 @@ public interface DoctorDao {
     void deleteDoctorById(int doctorId);
 
     Integer getMaxId();
+
+    Integer getDoctorIdByUserId(Integer userId);
 }
 

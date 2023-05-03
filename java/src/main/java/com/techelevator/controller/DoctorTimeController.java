@@ -28,6 +28,7 @@ public class DoctorTimeController {
     private final DoctorTimeDao doctorTimeDao;
     private final AppointmentDao appointmentDao;
 
+
     public DoctorTimeController(DoctorTimeDao doctorTimeDao, AppointmentDao appointmentDao) {
         this.doctorTimeDao = doctorTimeDao;
         this.appointmentDao = appointmentDao;

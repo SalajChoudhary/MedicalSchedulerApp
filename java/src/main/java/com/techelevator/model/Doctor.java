@@ -14,7 +14,7 @@ public class Doctor {
     private int suiteNumber;
     private int costPerHour;
     private String phoneNumber;
-
+    
     public int getDoctorId() {
         return doctorId;
     }

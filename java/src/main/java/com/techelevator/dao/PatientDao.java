@@ -22,4 +22,6 @@ public interface PatientDao {
     Integer getMaxId();
 
     void updatePatient (int patientId, Patient patient);
+
+    int getPatientIdByUserId(int id);
 }

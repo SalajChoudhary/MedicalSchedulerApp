@@ -2,7 +2,6 @@ package com.techelevator.dao;
 
 
 import com.techelevator.model.Doctor;
-import com.techelevator.model.User;
 import org.springframework.beans.NullValueInNestedPathException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +16,7 @@ import java.util.List;
 @Component
 public class JdbcDoctorDao implements DoctorDao{
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
 
     public JdbcDoctorDao(JdbcTemplate jdbcTemplate){
@@ -93,6 +92,12 @@ public class JdbcDoctorDao implements DoctorDao{
     public Integer getMaxId() {
         String sql = "SELECT(MAX(user_id)) FROM users;";
         return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
+    @Override
+    public Integer getDoctorIdByUserId(Integer userId) {
+        String sql = "SELECT doctor_id FROM doctor WHERE user_id = ?;";
+        return jdbcTemplate.queryForObject(sql, int.class, userId);
     }
 
 

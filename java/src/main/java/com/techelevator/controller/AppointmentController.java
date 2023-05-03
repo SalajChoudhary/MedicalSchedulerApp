@@ -33,6 +33,17 @@ public class AppointmentController {
     public List<Appointment> getAppointmentsByPatientId(@PathVariable int id) {
         return appointmentDao.getAppointmentsByPatientId(id);
     }
+
+    @GetMapping("/patient/user/{userId}")
+    public List<Appointment> getAppointmentsByPatientUserId(@PathVariable int userId) {
+        return appointmentDao.getPatientAppointmentsByUserId(userId);
+    }
+
+    @GetMapping("/doctor/user/{userId}")
+    public List<Appointment> getAppointmentsByDoctorUserId(@PathVariable int userId) {
+        return appointmentDao.getDoctorAppointmentsByUserId(userId);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public void createAppointment(@Valid @RequestBody Appointment appointment) {

@@ -71,6 +71,11 @@ public class JdbcPatientDao implements PatientDao{
             return null;
         }
     }
+
+    public int getPatientIdByUserId(int userId) {
+        String sql = "SELECT patient_id FROM patient WHERE user_id = ?";
+        return jdbcTemplate.queryForObject(sql, int.class, userId);
+    }
     @Override
     public int findPatientIdByPatientLastName(String patientLastName) {
         if (patientLastName == null) throw new IllegalArgumentException("Last name cannot be null");

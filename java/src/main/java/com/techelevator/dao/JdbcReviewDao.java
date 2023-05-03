@@ -44,7 +44,7 @@ public class JdbcReviewDao implements ReviewDao {
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, doctorId);
 
-        if(results.next()){
+        while(results.next()){
             review = mapRowToReview(results);
             reviews.add(review);
         }
@@ -91,6 +91,7 @@ public class JdbcReviewDao implements ReviewDao {
         review.setReviewRating(result.getInt("review_rating"));
         review.setReviewDate(LocalDate.parse(result.getString("review_date")));
         review.setPatientId(result.getInt("patient_id"));
+        review.setDoctorId(result.getInt("doctor_id"));
 
         return review;
 

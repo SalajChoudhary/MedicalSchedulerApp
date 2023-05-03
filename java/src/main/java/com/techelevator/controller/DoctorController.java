@@ -50,5 +50,10 @@ public class DoctorController {
         return Map.of("userId", (Integer) doctorDao.getMaxId());
     }
 
+    @GetMapping("/getDoctorId/{userId}")
+    public Map<String, Integer> getDoctorId(@PathVariable Integer userId) {
+        return Map.of("doctorId", (int) doctorDao.getDoctorIdByUserId(userId));
+    }
+
 
 }

@@ -18,6 +18,10 @@ public interface AppointmentDao {
 
     List<Appointment> getAppointmentsByDoctorId(int doctorId);
 
+    List<Appointment> getPatientAppointmentsByUserId(int userId);
+
+    List<Appointment> getDoctorAppointmentsByUserId(int userId);
+
     void createAppointment(Appointment appointment);
 
     void updateAppointment(int appointmentId, Appointment appointment);
