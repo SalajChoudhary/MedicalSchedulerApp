@@ -19,7 +19,7 @@
           label="type"
         ></v-select>
         <v-select
-          :items="doctors"
+          :items="this.$store.state.doctors"
           v-model="doctorObj"
           item-text="firstName"
           item-value="doctorId"
@@ -52,7 +52,6 @@
           :weekdays="weekday"
           :type="type"
           :events="filteredAppointments"
-          
           :now="now"
         ></v-calendar>
       </v-sheet>
@@ -84,10 +83,10 @@ export default {
       colors: ["blue"],
       names: ["Appointment", "Holiday", "PTO"],
       appointments: [],
-      now: '2023-04-20',
+      now: "2023-04-20",
       selectedDoctorId: null, // id of doctor,
       doctors: [],
-      doctorObj: {}
+      doctorObj: {},
     };
   },
   methods: {
@@ -102,48 +101,39 @@ export default {
       });
     },
     getEvents() {
-      
-      for (let i = 0; i < this.appointments.length; i++ ) {
+      for (let i = 0; i < this.appointments.length; i++) {
         let temp = this.appointments[i];
         let time = this.appointments[i].appointmentTime;
         let endTime;
-        if (time.slice(3,5) === '30') {
-          endTime = time.slice(0,2);
+        if (time.slice(3, 5) === "30") {
+          endTime = time.slice(0, 2);
           parseInt(endTime);
           endTime++;
-          endTime = endTime.toString() + ':00:00'; 
-          
+          endTime = endTime.toString() + ":00:00";
         } else {
-          endTime = time.slice(0,2) + ':30:00';
-          
+          endTime = time.slice(0, 2) + ":30:00";
         }
         let event = {
           docId: this.appointments[i].doctorId,
-          name: 'Appointment',
-          start: temp.appointmentDate + 'T' + temp.appointmentTime,
-          end: temp.appointmentDate += 'T' + endTime,
-          color: 'blue',
-          timed: false
+          name: "Appointment",
+          start: temp.appointmentDate + "T" + temp.appointmentTime,
+          end: (temp.appointmentDate += "T" + endTime),
+          color: "blue",
+          timed: false,
         };
         this.events.push(event);
-        
       }
     },
-    
-  },  
+  },
   computed: {
     // This should filter doctor apponintments by id - attached to :events for calendar
     filteredAppointments() {
-      return this.events.filter( appt =>  
-      appt.docId === this.selectedDoctorId  
-      );
+      return this.events.filter((appt) => appt.docId === this.selectedDoctorId);
     },
   },
   created() {
     this.getAppointments();
     this.doctors = this.$store.state.doctors;
-    
-    
   },
 };
 </script>

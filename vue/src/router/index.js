@@ -12,6 +12,8 @@ import DoctorAccount from '../components/DoctorAccount'
 import UpdateDoctorForm from '../components/UpdateDoctorForm'
 import RegisterDoctorForm from '../components/RegisterDoctorForm'
 import ReviewView from '../views/ReviewView'
+import CreateReview from "@/components/CreateReview.vue";
+import UpdateAppointmentForm from "@/components/UpdateAppointmentForm.vue";
 
 
 Vue.use(Router)
@@ -94,11 +96,20 @@ const router = new Router({
       }
     },
     {
+      path: "/appointments/:id",
+      name: "updateAppointment",
+      component: UpdateAppointmentForm,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
       path: "/reviews",
       name: "reviews",
       component: ReviewView,
       meta: {
-        requiresAuth: false
+        requiresAuth: false,
+        reload: true
       }
     },
       {
@@ -113,6 +124,14 @@ const router = new Router({
       path: "/updateDoctor/:id",
       name: "UpdateDoctorForm",
       component: UpdateDoctorForm,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/reviews/createReview",
+      name: "createReview",
+      component: CreateReview,
       meta: {
         requiresAuth: false
       }

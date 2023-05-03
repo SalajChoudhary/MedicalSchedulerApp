@@ -33,10 +33,21 @@ export default {
         }
         const response = await axios.get('http://localhost:9000/patients/maxId', config)
         this.response = JSON.parse(response.data.userId);
-        console.log(this.response);
+       // console.log(this.response);
         return this.response
     },
     getUserName() {
         return http.get(`/patients/currentUserName`);
+    },
+     async getCurrentPatientId(userId) {
+        let config = {
+            headers: {
+                'Accept' : 'application/json'
+            }
+        }
+        const response = await axios.get(`http://localhost:9000/patients/getPatientId/${userId}`, config);
+        let patientId = JSON.parse(response.data.patientId);
+        console.log(patientId);
+        return patientId;
     }
 }

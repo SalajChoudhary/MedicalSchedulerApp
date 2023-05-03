@@ -36,4 +36,18 @@ export default {
         console.log(this.response);
         return this.response;
     },
+    async getCurrentDoctorId(userId) {
+        let config = {
+            headers: {
+                'Accept' : 'application/json'
+            }
+        }
+        const response = await axios.get(`http://localhost:9000/doctors/getDoctorId/${userId}`, config);
+        let doctorId = JSON.parse(response.data.doctorId);
+        console.log(doctorId);
+        return doctorId;
+    },
+    getDoctorByUserId(id) {
+        
+    }
 }

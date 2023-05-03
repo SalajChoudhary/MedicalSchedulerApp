@@ -24,5 +24,13 @@ export default{
     },
     deleteAppointment(id) {
         return http.delete(`/appointments/${id}`)
+    },
+
+    getPatientAppointmentsByUserId(userId) {
+        return http.get(`/appointments/patient/user/${userId}`)
+    },
+
+    getDoctorAppointmentsByUserId(userId) {
+        return http.get(`/appointments/doctor/user/${userId}`)
     }
 }

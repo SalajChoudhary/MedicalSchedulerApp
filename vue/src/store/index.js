@@ -28,6 +28,9 @@ export default new Vuex.Store({
     reviews: [],
     doctorToUpdate: {},
     timeSlotByDoctor: [],
+    patientId: 0,
+    doctorId: 0,
+    currentAppointments: [],
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -69,6 +72,15 @@ export default new Vuex.Store({
     },
     SET_TIMESLOTBYDOC(state, data) {
       state.timeSlotByDoctor = data;
-    }
+    },
+    SET_PATIENT_ID(state, data) {
+      state.patientId = data;
+    },
+    SET_DOCTOR_ID(state, data) {
+      state.doctorId = data;
+    },
+    SET_CURRENT_APPOINTMENTS(state, data) {
+      state.currentAppointments = data;
+    },
   }
 })

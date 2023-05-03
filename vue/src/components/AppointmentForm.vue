@@ -1,4 +1,4 @@
-/* eslint-disable */
+-- /* eslint-disable */
 <template>
   <v-container fill-height fluid>
     <navbar />
@@ -17,10 +17,13 @@
             v-model="valid"
             @submit.prevent="createAppointment"
           >
-          <v-img class='mx-auto' src='../assets/caduceus-transparent-background-8.png'
-            max-width='50px'
-            max-height='100px'
-            > </v-img>
+            <v-img
+              class="mx-auto"
+              src="../assets/caduceus-transparent-background-8.png"
+              max-width="50px"
+              max-height="100px"
+            >
+            </v-img>
             <h1>Please Enter Appointment Information</h1>
             <v-text-field
               v-model="appointment.appointmentDate"
@@ -29,20 +32,6 @@
               prepend-inner-icon="mdi-cake"
               required
             ></v-text-field>
-            <v-select
-              :items="this.$store.state.doctors"
-              v-model="doctorObj"
-              item-text="firstName"
-              item-value="id"
-              return-object
-              dense
-              outlined
-              hide-details
-              class="ma-2 pb-6"
-              label="doctors"
-              @change="chosenDoctor"
-            ></v-select>
-
             <v-select
               :items="timeslots"
               v-model="appointment.appointmentTime"
@@ -62,8 +51,7 @@
               required
             >
             </v-text-field>
-
-            <v-btn type="submit" :disabled="!valid">Create Appointment</v-btn>
+            <v-btn type="submit" :disabled="!valid">Update Appointment</v-btn>
             <v-btn @click="clearInput"> Clear Fields </v-btn>
           </v-form>
         </v-card>
@@ -71,12 +59,10 @@
     </v-col>
   </v-container>
 </template>
-
 <script>
 import AppointmentService from "../services/AppointmentService";
 import Navbar from "../components/Navbar.vue";
 import DoctorTimeService from "../services/DoctorTimeService";
-
 export default {
   name: "AppointmentForm",
   components: {
@@ -98,7 +84,6 @@ export default {
     dateRules: [
       (value) => {
         if (value) return true;
-
         return "Date is required.";
       },
       // eslint-disable-next-line
@@ -110,20 +95,17 @@ export default {
           )
         )
           return true;
-
         return "Date must be in the format YYYY-MM-DD.";
       },
     ],
     timeRules: [
       (value) => {
         if (value) return true;
-
         return "Time is required.";
       },
       (value) => {
         if (/(([0-1][0-9])|([2][0-3])):([0-5][0-9]):([0-5][0-9])/.test(value))
           return true;
-
         return "Time must be in the format 00:00:00.";
       },
     ],
@@ -133,15 +115,16 @@ export default {
       this.$refs.appointmentForm.reset();
     },
     createAppointment() {
-      this.appointment.patientId = this.$store.state.currentPatient.patientId;
+      this.appointment.patientId = this.$store.state.patientId;
       AppointmentService.createAppointment(this.appointment).then(
         (response) => {
           if (response.status === 201) {
-            this.getTimeslots();
+         //   this.getTimeslots();
+            this.$router.push("/");
           }
         }
       );
-      this.$router.push("/");
+      //this.$router.push("/");
     },
     getTimeSlotByIdAndDate(id, date) {
       AppointmentService.getTimeArray(id, date).then((response) => {
@@ -152,7 +135,7 @@ export default {
     },
     chosenDoctor() {
       this.appointment.doctorId = this.doctorObj.doctorId;
-      console.log('id', this.doctorObj.doctorId);
+      console.log("id", this.doctorObj.doctorId);
       DoctorTimeService.getTimeArray(
         this.appointment.doctorId,
         this.appointment.appointmentDate
@@ -163,9 +146,12 @@ export default {
   },
   created() {
     this.appointment.patientId = this.$store.state.currentPatient.patientId;
-    // AppointmentService.getTimeArray(this.appointment.doctorId, this.appointment.appointmentDate).then(response => {
-    //   this.timeSlots = response.data;
-    // });
+    AppointmentService.getTimeArray(
+      this.appointment.doctorId,
+      this.appointment.appointmentDate
+    ).then((response) => {
+      this.timeSlots = response.data;
+    });
   },
 };
 </script>
