@@ -15,7 +15,7 @@
             ref="appointmentForm"
             id="appointmentForm"
             v-model="valid"
-            @submit.prevent="updateAppointment"
+            @submit.prevent="deleteAppointment"
           >
             <v-img
               class="mx-auto"
@@ -25,9 +25,9 @@
             >
             </v-img>
             <v-select
-              :items="this.$store.state.currentAppointments"
-              v-model="appointment"
-              item-text=""
+              :items="this.$store.getters.currentPatientAppointment"
+              v-model="appointmentObj"
+              item-text="appointmentDate"
               item-value="id"
               return-object
               dense
@@ -41,7 +41,7 @@
               <v-select
                       :items="['Update', 'Delete']"
                       v-model="selected"
-                      item-text=""
+                      item-text="selected"
                       item-value="id"
                       return-object
                       dense
@@ -50,31 +50,31 @@
                       class="ma-2 pb-6"
                       label="Choose: Update or Delete"
                   ></v-select>
-            <v-select
-              :items="this.$store.state.doctors"
-              v-model="doctorObj"
-              item-text="firstName"
-              item-value="id"
-              return-object
-              dense
-              outlined
-              hide-details
-              class="ma-2 pb-6"
-              label="doctors"
-              @change="chosenDoctor"
-            ></v-select>
-            <v-select
-              :items="timeslots"
-              v-model="appointment.appointmentTime"
-              item-text=""
-              item-value="id"
-              return-object
-              dense
-              outlined
-              hide-details
-              class="ma-2 pb-6"
-              label="timeslots"
-            ></v-select>
+<!--            <v-select-->
+<!--              :items="this.$store.state.doctors"-->
+<!--              v-model="doctorObj"-->
+<!--              item-text="firstName"-->
+<!--              item-value="id"-->
+<!--              return-object-->
+<!--              dense-->
+<!--              outlined-->
+<!--              hide-details-->
+<!--              class="ma-2 pb-6"-->
+<!--              label="doctors"-->
+<!--              @change="chosenDoctor"-->
+<!--            ></v-select>-->
+<!--            <v-select-->
+<!--              :items="timeslots"-->
+<!--              v-model="appointment.appointmentTime"-->
+<!--              item-text=""-->
+<!--              item-value="id"-->
+<!--              return-object-->
+<!--              dense-->
+<!--              outlined-->
+<!--              hide-details-->
+<!--              class="ma-2 pb-6"-->
+<!--              label="timeslots"-->
+<!--            ></v-select>-->
             <v-text-field
               v-model="appointment.description"
               :counter="100"
@@ -103,8 +103,17 @@ export default {
   data: () => ({
     appointment: {
       patientId: 0,
-      doctorId: null,
-      appointmentId: null,
+      doctorId: 0,
+      appointmentId: 0,
+      appointmentDuration: 30,
+      description: "",
+      appointmentDate: "",
+      appointmentTime: "",
+    },
+    appointmentObj: {
+      patientId: 0,
+      doctorId: 0,
+      appointmentId: 0,
       appointmentDuration: 30,
       description: "",
       appointmentDate: "",
@@ -161,6 +170,25 @@ export default {
       );
       //this.$router.push("/");
     },
+    deleteAppointment() {
+      this.appointment.patientId = this.$store.state.patientId;
+      // appointmentObj = this.$store.state.currentAppointments.filter(currentAppointments => currentAppointments.appointmentDate === this.appointment.appointmentDate);
+      this.appointment.appointmentId = this.appointmentObj.appointmentId;
+      AppointmentService.deleteAppointment(this.appointment.appointmentId).then(
+        (response) => {
+          if (response.status === 200) {
+            //   this.getTimeslots();
+            this.$store.state.currentAppointments.commit(
+              "deleteAppointment",
+              this.appointment.appointmentId
+            );
+            this.$router.push("/");
+          } else {
+            console.log("error deleting appointment");
+          }
+        }
+      );
+    },
     getTimeSlotByIdAndDate(id, date) {
       AppointmentService.getTimeArray(id, date).then((response) => {
         this.timeSlots = response.data;
@@ -180,7 +208,7 @@ export default {
     },
     chosenAppointment() {
       console.log("id", this.appointment.appointmentId);
-      AppointmentService.getAppointmentById(
+      AppointmentService.getAppointmentbyDate(
         this.appointment.appointmentId
       ).then((response) => {
         this.appointment = response.data;

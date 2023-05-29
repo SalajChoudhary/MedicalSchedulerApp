@@ -16,6 +16,9 @@ export default{
     getAppointmentByDoctorId(id){
         return http.get(`/appointments/doctor/${id}`);
     },
+    getAppointmentbyDate(appointmentDate) {
+      return http.get(`/appointments/date/${appointmentDate}`);
+    },
     createAppointment(appointment) {
         return http.post('/appointments', appointment);
     },

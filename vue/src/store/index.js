@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
@@ -30,7 +31,7 @@ export default new Vuex.Store({
     timeSlotByDoctor: [],
     patientId: 0,
     doctorId: 0,
-    currentAppointments: [],
+    currentAppointments: [] || '',
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -82,5 +83,23 @@ export default new Vuex.Store({
     SET_CURRENT_APPOINTMENTS(state, data) {
       state.currentAppointments = data;
     },
-  }
+  },
+  getters: {
+      getDoctors: state => {
+        return state.doctors;
+      },
+    getPatients: state => {
+      return state.patients;
+    },
+    getTimeSlots: state => {
+      return state.timeSlots;
+    },
+    getAppointment: state => {
+      return state.currentAppointments;
+    },
+    currentPatientAppointment: state => {
+        return state.appointments.filter(appointment => appointment.patientId === state.patientId);
+    },
+  },
+  plugins: [createPersistedState()],
 })
