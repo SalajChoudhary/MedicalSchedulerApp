@@ -28,5 +28,6 @@ public interface AppointmentDao {
 
     void deleteAppointment(int appointmentId);
 
+    List<Appointment> getAppointmentsByDate(String date);
 }
 

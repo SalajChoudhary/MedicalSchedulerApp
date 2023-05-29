@@ -34,6 +34,11 @@ public class AppointmentController {
         return appointmentDao.getAppointmentsByPatientId(id);
     }
 
+    @GetMapping("/date/{appointmentDate}")
+    public List<Appointment> getAppointmentsByDate(@PathVariable String appointmentDate) {
+        return appointmentDao.getAppointmentsByDate(appointmentDate.substring(0, 10));
+    }
+
     @GetMapping("/patient/user/{userId}")
     public List<Appointment> getAppointmentsByPatientUserId(@PathVariable int userId) {
         return appointmentDao.getPatientAppointmentsByUserId(userId);

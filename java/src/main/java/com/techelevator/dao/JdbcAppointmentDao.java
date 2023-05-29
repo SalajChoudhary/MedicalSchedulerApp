@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class JdbcAppointmentDao implements AppointmentDao{
@@ -121,6 +122,20 @@ public class JdbcAppointmentDao implements AppointmentDao{
     }
 
     @Override
+    public List<Appointment> getAppointmentsByDate(String date) {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointment WHERE appointment_date = ?;";
+        try {
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql, date);
+            while(result.next()) {
+                appointments.add(mapRowToAppointment(result));
+            }
+        } catch (NullValueInNestedPathException | EmptyResultDataAccessException e) {
+            throw new RuntimeException("No appointment found");
+        }
+        return appointments;
+    }
+    @Override
     public void createAppointment(Appointment appointment) {
         String sql = "INSERT INTO appointment(patient_id, doctor_id, appointment_duration, description, appointment_date, appointment_time) VALUES (?, ?, ?, ?, ?, ?);";
         jdbcTemplate.update(sql, appointment.getPatientId(), appointment.getDoctorId(), appointment.getAppointmentDuration(), appointment.getDescription(), appointment.getAppointmentDate(), appointment.getAppointmentTime());
@@ -149,8 +164,8 @@ public class JdbcAppointmentDao implements AppointmentDao{
         appointment.setDoctorId(results.getInt("doctor_id"));
         appointment.setAppointmentDuration(results.getInt("appointment_duration"));
         appointment.setDescription(results.getString("description"));
-        appointment.setAppointmentTime((results.getTime("appointment_time").toLocalTime()));
-        appointment.setAppointmentDate(LocalDate.parse(results.getString("appointment_date")));
+        appointment.setAppointmentTime(results.getTime("appointment_time").toLocalTime());
+        appointment.setAppointmentDate(LocalDate.parse(Objects.requireNonNull(results.getString("appointment_date"))));
         return appointment;
 
     }
