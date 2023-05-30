@@ -51,7 +51,7 @@ public class JdbcAppointmentDao implements AppointmentDao{
         List<Appointment> appointments = new ArrayList<>();
         String sql = "SELECT * FROM appointment JOIN patient ON appointment.patient_id=patient.patient_id WHERE patient.patient_id = ?;";
         try {
-            SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql, patientId);
             while(result.next()) {
                 appointments.add(mapRowToAppointment(result));
             }
@@ -144,8 +144,10 @@ public class JdbcAppointmentDao implements AppointmentDao{
 
     @Override
     public void updateAppointment(int appointmentId, Appointment appointment) {
-        String sql = "UPDATE appointment SET appointment_id=?, patient_id=?, doctor_id=?, appointment_duration=?, description=? WHERE appointment_id=?;";
-        jdbcTemplate.update(sql,appointment, appointmentId);
+        String sql = "UPDATE appointment SET appointment_id=?, patient_id=?, doctor_id=?, appointment_duration=?, description=?, appointment_date=?, appointment_time=? WHERE appointment_id=?;";
+        jdbcTemplate.update(sql, appointmentId, appointment.getPatientId(), appointment.getDoctorId(),
+                appointment.getAppointmentDuration(), appointment.getDescription(), appointment.getAppointmentDate(),
+                appointment.getAppointmentTime(), appointmentId);
 
     }
 
