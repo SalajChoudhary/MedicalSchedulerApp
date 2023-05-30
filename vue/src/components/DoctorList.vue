@@ -23,7 +23,7 @@
           </v-data-table>
         </v-card>
         <v-btn class="mt-3" @click="getItem()"> Book Appointment </v-btn>
-        <v-btn class="mt-3" @click="goToUpdateForm()"> Reschedule Appointment </v-btn>
+        <v-btn class="mt-3" @click="goToUpdateForm()"> Change Appointment </v-btn>
       </v-col>
     </v-row>
   </v-container>

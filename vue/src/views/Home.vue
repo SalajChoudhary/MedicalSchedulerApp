@@ -43,6 +43,7 @@ export default {
             this.$store.commit("SET_PATIENT", response.data);
           }
         );
+        this.setPatientAppointments();
         // PatientService.getCurrentPatientId(this.$store.state.user.id).then(
         //     // eslint-disable-next-line no-unused-vars
         //     (response) => {
@@ -51,6 +52,13 @@ export default {
         // );
         // console.log(this.$store.state.patientId + " it worked!");
       }
+    },
+    async setPatientAppointments() {
+      AppointmentService.getAppointmentByPatientId(this.$store.state.patientId).then(
+        (response) => {
+          this.$store.commit("SET_CURRENT_APPOINTMENTS", response.data);
+        }
+      );
     },
     isDoctor() {
       if (this.$store.state.user.authorities[0].name === "ROLE_DOCTOR") {
@@ -90,7 +98,6 @@ export default {
         this.$store.state.patientId,
         " CHECKING PATIENT ID IN THE STORE"
       );
-      this.$store.commit("SET_CURRENT_APPOINTMENTS", await AppointmentService.getAppointmentByPatientId(this.$store.state.patientId));
     }
     if (this.$store.state.user.authorities[0].name === "ROLE_DOCTOR") {
       const currentDoctorId = await DoctorService.getCurrentDoctorId(
@@ -101,7 +108,8 @@ export default {
         this.$store.state.doctorId,
         " CHECKING DOCTOR ID IN THE STORE"
       );
-      this.$store.commit("SET_CURRENT_APPOINTMENTS", await AppointmentService.getAppointmentByDoctorId(this.$store.state.doctorId));
+      const currentAppointments = await AppointmentService.getAppointmentByDoctorId(this.$store.state.doctorId);
+      console.log(currentAppointments);
     }
   },
 };

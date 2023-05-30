@@ -24,8 +24,22 @@
               max-height="100px"
             >
             </v-img>
+
             <v-select
-              :items="this.$store.getters.currentPatientAppointment"
+                :items="['Update', 'Delete']"
+                v-model="selected"
+                item-text="selected"
+                item-value="id"
+                return-object
+                dense
+                outlined
+                hide-details
+                class="ma-2 pb-6"
+                label="Choose: Update or Delete"
+            ></v-select>
+
+            <v-select
+              :items="this.$store.state.currentAppointments"
               v-model="appointmentObj"
               item-text="appointmentDate"
               item-value="id"
@@ -38,18 +52,6 @@
               @change="chosenAppointment"
             >
             </v-select>
-              <v-select
-                      :items="['Update', 'Delete']"
-                      v-model="selected"
-                      item-text="selected"
-                      item-value="id"
-                      return-object
-                      dense
-                      outlined
-                      hide-details
-                      class="ma-2 pb-6"
-                      label="Choose: Update or Delete"
-                  ></v-select>
 <!--            <v-select-->
 <!--              :items="this.$store.state.doctors"-->
 <!--              v-model="doctorObj"-->
@@ -76,13 +78,36 @@
 <!--              label="timeslots"-->
 <!--            ></v-select>-->
             <v-text-field
-              v-model="appointment.description"
+                v-show="selected === 'Update'"
+                v-model="appointmentObj.appointmentDate"
+                :counter="100"
+                label="Appointment Date"
+                prepend-inner-icon="mdi-cake"
+                required
+            ></v-text-field>
+
+            <v-select
+                v-show="selected === 'Update'"
+                :items="timeslots"
+                v-model="appointmentObj.appointmentTime"
+                item-text=""
+                item-value="id"
+                return-object
+                dense
+                outlined
+                hide-details
+                class="ma-2 pb-6"
+                label="timeslots"
+            ></v-select>
+            <v-text-field
+                v-show="selected === 'Update'"
+              v-model="appointmentObj.description"
               :counter="100"
               label="Description"
               required
             >
             </v-text-field>
-            <v-btn type="submit" :disabled="!valid">Update Appointment</v-btn>
+            <v-btn type="submit" :disabled="!valid">Change Appointment</v-btn>
             <v-btn @click="clearInput"> Clear Fields </v-btn>
           </v-form>
         </v-card>
@@ -178,11 +203,11 @@ export default {
         (response) => {
           if (response.status === 200) {
             //   this.getTimeslots();
+            this.$router.push("/");
             this.$store.state.currentAppointments.commit(
               "deleteAppointment",
               this.appointment.appointmentId
             );
-            this.$router.push("/");
           } else {
             console.log("error deleting appointment");
           }
@@ -208,7 +233,8 @@ export default {
     },
     chosenAppointment() {
       console.log("id", this.appointment.appointmentId);
-      AppointmentService.getAppointmentbyDate(
+      this.appointment.appointmentId = this.appointmentObj.appointmentId;
+      AppointmentService.getAppointmentById(
         this.appointment.appointmentId
       ).then((response) => {
         this.appointment = response.data;
