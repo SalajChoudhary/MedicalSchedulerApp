@@ -15,7 +15,7 @@
             ref="appointmentForm"
             id="appointmentForm"
             v-model="valid"
-            @submit.prevent="deleteAppointment"
+            @submit.prevent="changeAppointment"
           >
             <v-img
               class="mx-auto"
@@ -87,17 +87,15 @@
             ></v-text-field>
 
             <v-select
-                v-show="selected === 'Update'"
+                v-show="selected === 'Update' && appointmentObj.appointmentDate !== ''"
                 :items="timeslots"
-                v-model="appointmentObj.appointmentTime"
-                item-text=""
-                item-value="id"
-                return-object
+                v-model="appointmentObj.appointmentTime" t
                 dense
                 outlined
                 hide-details
                 class="ma-2 pb-6"
                 label="timeslots"
+                @change="chosenTime"
             ></v-select>
             <v-text-field
                 v-show="selected === 'Update'"
@@ -181,13 +179,25 @@ export default {
     clearInput() {
       this.$refs.appointmentForm.reset();
     },
+    changeAppointment() {
+
+      if(this.selected === 'Update') {
+        this.updateAppointment();
+      } else {
+        this.deleteAppointment();
+      }
+    },
     updateAppointment() {
       this.appointment.patientId = this.$store.state.patientId;
-      AppointmentService.updateAppointment(this.appointment.appointmentId).then(
+      AppointmentService.updateAppointment(this.appointmentObj.appointmentId, this.appointmentObj).then(
         (response) => {
           if (response.status === 200) {
             //   this.getTimeslots();
             this.$router.push("/");
+            this.$store.state.currentAppointments.commit(
+                "updateAppointment",
+                this.appointment.appointmentId
+            );
           } else {
             console.log("error updating appointment");
           }
@@ -221,6 +231,14 @@ export default {
       // service call here to pull data from doctor based on id this.selected and date selected this.dateSelected
       // will i need to add a list of dates as well as a dropdown menu?
     },
+    chosenTime() {
+      DoctorTimeService.getTimeArray(
+          this.appointmentObj.doctorId,
+          this.appointmentObj.appointmentDate
+      ).then((response) => {
+        this.timeslots = response.data;
+      });
+    },
     chosenDoctor() {
       this.appointment.doctorId = this.doctorObj.doctorId;
       console.log("id", this.doctorObj.doctorId);
@@ -239,6 +257,7 @@ export default {
       ).then((response) => {
         this.appointment = response.data;
       });
+      this.chosenTime();
     },
   },
   created() {

@@ -6,12 +6,19 @@
         <v-divider class="mb-16"> </v-divider>
 
         <v-card max-width="400" flat class="mb-6">
+
+          <v-img
+            class="mx-auto"
+            src="https://slidescorner.com/wp-content/uploads/2022/10/01-Medical-Blue-Heart-Beat-Abstract-Lines-free-PPT-Background-by-SlidesCorner--500x281.jpg"
+            max-width="400px"
+            max-height="400px">
           <v-card-title> {{ this.officeInfo.officeName }} </v-card-title>
           <v-card-text>
             <p>{{ this.officeInfo.mainAddress }}</p>
             <p>{{ this.officeInfo.cityState }}</p>
             <p>{{ this.officeInfo.mainPhone }}</p>
           </v-card-text>
+            </v-img>
         </v-card>
         <div class="display-1 ma-2 mt-16">Available Doctors</div>
         <v-card>
@@ -93,4 +100,10 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.mt-3 {
+  margin-top: 1.0rem;
+  margin-right: 1.0rem;
+  margin-left: 1.0rem;
+}
+</style>
