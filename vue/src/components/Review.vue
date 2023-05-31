@@ -216,7 +216,7 @@ export default {
   methods: {
     getAllReviews() {
       reviewService.getAllReviews().then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         this.reviews = this.$store.state.reviews;
         this.$store.commit("SET_REVIEWS", response.data);
       });

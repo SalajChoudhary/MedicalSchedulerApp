@@ -99,7 +99,7 @@ export default {
     },
     createReview() {
       this.newReview.patientId = this.$store.state.patientId;
-      console.log(this.newReview.patientId + " checking review patient Id");
+      // console.log(this.newReview.patientId + " checking review patient Id");
         let date = new Date();
         let year = date.getFullYear();
         let month = String(date.getMonth() + 1).padStart(2, "0");
@@ -119,7 +119,7 @@ export default {
     chosenDoctor() {
       this.newReview.doctorId = this.doctorObj.doctorId;
         this.newReview.patientId = this.$store.state.patientId;
-        console.log("id", this.doctorObj.doctorId);
+        // console.log("id", this.doctorObj.doctorId);
     },
   },
   created() {

@@ -4,7 +4,7 @@ import axios from 'axios';
 var userId = 5;
 
 const http = axios.create({
-    baseURL: "http://localhost:9000"
+    baseURL: "http://medicalscheduler-env-1.eba-gjvnpgad.us-east-1.elasticbeanstalk.com"
 });
 
 export default {
@@ -31,7 +31,7 @@ export default {
                 'Accept': 'application/json'
             }
         }
-        const response = await axios.get('http://localhost:9000/patients/maxId', config)
+        const response = await http.get('/patients/maxId', config)
         this.response = JSON.parse(response.data.userId);
        // console.log(this.response);
         return this.response
@@ -45,7 +45,7 @@ export default {
                 'Accept' : 'application/json'
             }
         }
-        const response = await axios.get(`http://localhost:9000/patients/getPatientId/${userId}`, config);
+        const response = await http.get(`/patients/getPatientId/${userId}`, config);
         let patientId = JSON.parse(response.data.patientId);
         console.log(patientId);
         return patientId;

@@ -174,9 +174,9 @@ export default {
     this.doctor.userId = this.$store.state.doctorToUpdate.userId;
     this.doctor.doctorId = this.$store.state.doctorToUpdate.doctorId;
     this.doctor = this.$store.state.doctorToUpdate;
-    console.log("start");
-    console.log(this.$store.state.doctorToUpdate);
-    console.log("end");
+    // console.log("start");
+    // console.log(this.$store.state.doctorToUpdate);
+    // console.log("end");
   },
 };
 </script>

@@ -2,7 +2,7 @@ import axios from 'axios';
 /* eslint-disable */
 var userId = 5;
 const http = axios.create({
-    baseURL: "http://localhost:9000"
+    baseURL: "http://medicalscheduler-env-1.eba-gjvnpgad.us-east-1.elasticbeanstalk.com"
 });
 
 export default {
@@ -31,7 +31,7 @@ export default {
                 'Accept': 'application/json'
             }
         }
-        const response = await axios.get('http://localhost:9000/doctors/maxId', config)
+        const response = await http.get('/doctors/maxId', config)
         this.response = JSON.parse(response.data.userId);
         console.log(this.response);
         return this.response;
@@ -42,7 +42,7 @@ export default {
                 'Accept' : 'application/json'
             }
         }
-        const response = await axios.get(`http://localhost:9000/doctors/getDoctorId/${userId}`, config);
+        const response = await http.get(`/doctors/getDoctorId/${userId}`, config);
         let doctorId = JSON.parse(response.data.doctorId);
         console.log(doctorId);
         return doctorId;

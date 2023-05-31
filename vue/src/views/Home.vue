@@ -88,28 +88,28 @@ export default {
     },
   },
   async created() {
-    console.log(this.$store.state.user.authorities[0].name);
+    // console.log(this.$store.state.user.authorities[0].name);
     if (this.$store.state.user.authorities[0].name === "ROLE_USER") {
       const currentPatientId = await PatientService.getCurrentPatientId(
         this.$store.state.user.id
       );
       this.$store.commit("SET_PATIENT_ID", parseInt(currentPatientId));
-      console.log(
-        this.$store.state.patientId,
-        " CHECKING PATIENT ID IN THE STORE"
-      );
+      // console.log(
+      //   this.$store.state.patientId,
+      //   " CHECKING PATIENT ID IN THE STORE"
+      // );
     }
     if (this.$store.state.user.authorities[0].name === "ROLE_DOCTOR") {
       const currentDoctorId = await DoctorService.getCurrentDoctorId(
         this.$store.state.user.id
       );
       this.$store.commit("SET_DOCTOR_ID", parseInt(currentDoctorId));
-      console.log(
-        this.$store.state.doctorId,
-        " CHECKING DOCTOR ID IN THE STORE"
-      );
-      const currentAppointments = await AppointmentService.getAppointmentByDoctorId(this.$store.state.doctorId);
-      console.log(currentAppointments);
+      // console.log(
+      //   this.$store.state.doctorId,
+      //   " CHECKING DOCTOR ID IN THE STORE"
+      // );
+      // const currentAppointments = await AppointmentService.getAppointmentByDoctorId(this.$store.state.doctorId);
+      // console.log(currentAppointments);
     }
   },
 };
