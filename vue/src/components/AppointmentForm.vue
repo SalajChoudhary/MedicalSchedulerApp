@@ -169,9 +169,9 @@ export default {
   },
   created() {
 
-    // AppointmentService.getTimeArray(this.appointment.doctorId, this.appointment.appointmentDate).then(response => {
-    //   this.timeSlots = response.data;
-    // });
+    AppointmentService.getTimeArray(this.appointment.doctorId, this.appointment.appointmentDate).then(response => {
+      this.timeSlots = response.data;
+    });
   },
 };
 </script>
